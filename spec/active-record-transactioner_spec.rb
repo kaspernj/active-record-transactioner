@@ -18,5 +18,13 @@ describe "ActiveRecordTransactioner" do
     model1.save_called.should eql(true)
     model2.save_called.should eql(true)
     model3.save_called.should eql(false)
+    
+    called = false
+    ActiveRecordTransactioner.new do |trans|
+      called = true
+      trans.class.should eql(ActiveRecordTransactioner)
+    end
+    
+    called.should eql(true)
   end
 end

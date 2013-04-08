@@ -24,7 +24,7 @@ class ActiveRecordTransactioner
     
     if block_given?
       begin
-        yield
+        yield self
       ensure
         flush
       end
