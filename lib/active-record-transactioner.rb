@@ -21,6 +21,7 @@ class ActiveRecordTransactioner
     @count = 0
     @lock = Monitor.new
     @lock_threads = Monitor.new
+    @lock_models = {}
     
     if block_given?
       begin
@@ -35,6 +36,8 @@ class ActiveRecordTransactioner
   def queue(model)
     @lock.synchronize do
       klass = model.class
+      
+      @lock_models[klass] = Mutex.new if !@lock_models.key?(klass)
       @models[klass] = [] if !@models.key?(klass)
       @models[klass] << model
       @count += 1
@@ -53,19 +56,24 @@ class ActiveRecordTransactioner
         models = val
         @models[klass] = []
         @count -= models.length
+        thread = nil
         
-        thread = Thread.new do
-          begin
-            klass.__send__(@args[:transaction_method]) do
-              models.each do |model|
-                model.__send__(@args[:call_method], *@args[:call_args])
+        @lock_models[klass].synchronize do
+          thread = Thread.new do
+            begin
+              @lock_models[klass].synchronize do
+                klass.__send__(@args[:transaction_method]) do
+                  models.each do |model|
+                    model.__send__(@args[:call_method], *@args[:call_args])
+                  end
+                end
               end
+            rescue => e
+              puts e.inspect
+              puts e.backtrace
+            ensure
+              @threads.delete(Thread.current)
             end
-          rescue => e
-            puts e.inspect
-            puts e.backtrace
-          ensure
-            @threads.delete(Thread.current)
           end
         end
         
