@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "active-record-transactioner"
   gem.homepage = "http://github.com/kaspernj/active-record-transactioner"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Queue up calls to specific models and execute them in transactions, after a certain number of models have been added.}
+  gem.description = %Q{Queue up calls to specific models and execute them in transactions, after a certain number of models have been added.}
   gem.email = "kj@gfish.com"
   gem.authors = ["Kasper Johansen"]
   # dependencies defined in Gemfile
