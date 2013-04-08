@@ -28,6 +28,7 @@ class ActiveRecordTransactioner
         yield self
       ensure
         flush
+        join
       end
     end
   end
