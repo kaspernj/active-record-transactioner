@@ -27,4 +27,14 @@ describe "ActiveRecordTransactioner" do
     
     called.should eql(true)
   end
+  
+  it "should not fail under the Rails reverse bug" do
+    ActiveRecordTransactionerTestClass::ARGS[:nilraise] = true
+    trans = ActiveRecordTransactioner.new(:transaction_size => 1)
+    model1 = ActiveRecordTransactionerTestClass.new
+    trans.queue(model1)
+    trans.join
+    
+    ActiveRecordTransactionerTestClass::ARGS[:nilraise].should eql(false)
+  end
 end

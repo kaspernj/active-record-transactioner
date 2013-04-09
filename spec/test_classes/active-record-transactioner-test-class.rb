@@ -1,11 +1,19 @@
 class ActiveRecordTransactionerTestClass
-  attr_reader :save_called
+  attr_reader :save_called, :args
+  
+  ARGS = {:nilraise => false}
   
   def initialize
     @save_called = false
   end
   
   def self.transaction
+    if ActiveRecordTransactionerTestClass::ARGS[:nilraise]
+      nilobj = nil
+      ActiveRecordTransactionerTestClass::ARGS[:nilraise] = false
+      nilobj.reverse
+    end
+    
     Thread.current[:trans] = self.name
     
     begin

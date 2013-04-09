@@ -81,6 +81,8 @@ class ActiveRecordTransactioner
                 puts
                 retry
               end
+              
+              raise e
             ensure
               @threads.delete(Thread.current)
             end
