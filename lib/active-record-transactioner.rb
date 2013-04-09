@@ -72,6 +72,15 @@ class ActiveRecordTransactioner
             rescue => e
               puts e.inspect
               puts e.backtrace
+              
+              if e.is_a?(NoMethodError) and e.message.to_s.include?("`reverse' for nil:NilClass")
+                puts
+                puts "Warning: Known Rails reverse error when using transaction - retrying in 2 sec."
+                sleep 2
+                puts "Retrying"
+                puts
+                retry
+              end
             ensure
               @threads.delete(Thread.current)
             end
