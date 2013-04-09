@@ -1,19 +1,23 @@
 = active-record-transactioner
 
-  trans = ActiveRecordTransactioner.new
-  
   #Iterate a million times - will save each 1000 in a transaction with "save!".
-  models.each do |model|
-    trans.queue(model)
+  ActiveRecordTransactioner.new do |trans|
+    models.each do |model|
+      trans.queue(model)
+    end
   end
   
   #You can also do it a bit more complicated.
-  trans = ActiveRecordTransactioner.new(
+  ActiveRecordTransactioner.new(
     :call_args => ["Hello world!"],
     :call_method => :save!,
     :transaction_method => :transaction,
     :transaction_size => 1000
-  )
+  ) do |trans|
+    models.each do |model|
+      trans.queue(model)
+    end
+  end
 
 == Contributing to active-record-transactioner
  
