@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "active-record-transactioner"
-  s.version = "0.0.4"
+  s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kasper Johansen"]
-  s.date = "2013-04-09"
+  s.date = "2014-05-18"
   s.description = "Queue up calls to specific models and execute them in transactions, after a certain number of models have been added."
   s.email = "kj@gfish.com"
   s.extra_rdoc_files = [
@@ -34,11 +34,11 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/kaspernj/active-record-transactioner"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.25"
+  s.rubygems_version = "2.0.7"
   s.summary = "Queue up calls to specific models and execute them in transactions, after a certain number of models have been added."
 
   if s.respond_to? :specification_version then
-    s.specification_version = 3
+    s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
