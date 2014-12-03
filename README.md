@@ -4,6 +4,8 @@
 
 # active-record-transactioner
 
+Queue saving of many models into transactions through multiple threads for optimal database-performance in ActiveRecord.
+
 ## Install
 
 Add to your Gemfile and bundle:
