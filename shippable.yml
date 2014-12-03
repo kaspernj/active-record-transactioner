@@ -1,0 +1,9 @@
+language: ruby
+cache: bundler
+archive: true
+rvm:
+  - 2.1.2
+script:
+  - CODECLIMATE_REPO_TOKEN=b7d9c971bea2879b81bdf35f600b985bf3a016c6104169b2c29c213a5d2e7142 bundle exec rspec
+notifications:
+   email: false
