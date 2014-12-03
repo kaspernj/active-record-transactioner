@@ -4,12 +4,20 @@
 
 # active-record-transactioner
 
+## Install
+
+Add to your Gemfile and bundle:
+```ruby
+gem 'active-record-transactioner'
+```
+
 ## Usage
 
-### Iterate a million times - will save each 1000 in a transaction with `save!`.
+### Iterate a million times - will update each 1000 records in a single transaction with `save!`.
 ```ruby
 ActiveRecordTransactioner.new do |trans|
   models.each do |model|
+    model.some_attribute = "some_value"
     trans.queue(model)
   end
 end
@@ -24,6 +32,7 @@ ActiveRecordTransactioner.new(
   transaction_size: 1000
 ) do |trans|
   models.each do |model|
+    model.some_attribute = "some_value"
     trans.queue(model)
   end
 end
