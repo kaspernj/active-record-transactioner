@@ -17,8 +17,12 @@ class ActiveRecordTransactionerTestClass
     end
   end
 
-  def save!
+  def save!(args = {})
     raise "Failure - no transaction: #{Thread.current[:trans]}, #{self.class.name}" if Thread.current[:trans] != self.class.name
     @save_called = true
+  end
+
+  def valid?
+    true
   end
 end

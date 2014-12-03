@@ -6,6 +6,7 @@ class ActiveRecordTransactioner
     call_method: :save!,
     transaction_method: :transaction,
     transaction_size: 1000,
+    threadded: false,
     max_running_threads: 2,
     debug: false
   }
@@ -16,13 +17,7 @@ class ActiveRecordTransactioner
     args.each { |key, val| raise "Invalid key: '#{key}'." unless ALLOWED_ARGS.include?(key) }
 
     @args = DEFAULT_ARGS.merge(args)
-    @models = {}
-    @threads = []
-    @count = 0
-    @lock = Monitor.new
-    @lock_threads = Monitor.new
-    @lock_models = {}
-    @debug = @args[:debug]
+    parse_and_set_args
 
     if block_given?
       begin
@@ -35,77 +30,49 @@ class ActiveRecordTransactioner
   end
 
   #Adds another model to the queue and calls 'flush' if it is over the limit.
-  def queue(model)
+  def save!(model)
+    raise ActiveRecord::RecordInvalid, model unless model.valid?
+    queue(model, type: :save!, validate: false)
+  end
+
+  def destroy!(model)
+    queue(model, type: :destroy!)
+  end
+
+  #Adds another model to the queue and calls 'flush' if it is over the limit.
+  def queue(model, args = {})
+    args[:type] ||= :save!
+
     @lock.synchronize do
       klass = model.class
 
-      @lock_models[klass] = Mutex.new unless @lock_models.key?(klass)
-      @models[klass] = [] unless @models.key?(klass)
-      @models[klass] << model
+      @lock_models[klass] ||= Mutex.new
+      @models[klass] ||= []
+      @models[klass] << {model: model, type: args[:type]}
       @count += 1
     end
 
-    flush if @count >= @args[:transaction_size]
+    flush if should_flush?
   end
 
   #Flushes the specified method on all the queued models in a thread for each type of model.
   def flush
-    threads = []
-    wait_for_threads
+    wait_for_threads if @args[:threadded]
 
     @lock.synchronize do
-      @models.each do |klass, val|
-        next if val.empty?
+      @models.each do |klass, models|
+        next if models.empty?
 
-        models = val
         @models[klass] = []
         @count -= models.length
-        thread = nil
 
-        @lock_models[klass].synchronize do
-          thread = Thread.new do
-            begin
-              @lock_models[klass].synchronize do
-                debug "Opening new transaction by using '#{@args[:transaction_method]}'."
-                klass.__send__(@args[:transaction_method]) do
-                  models.each do |model|
-                    # debug "Saving #{model.class.name}(#{model.id}) with method #{@args[:call_method]}"
-                    model.__send__(@args[:call_method], *@args[:call_args])
-                  end
-                end
-              end
-            rescue => e
-              puts e.inspect
-              puts e.backtrace
-
-              if e.is_a?(NoMethodError) && e.message.to_s.include?("`reverse' for nil:NilClass")
-                puts "Warning: Known Rails reverse error when using transaction - retrying in 2 sec."
-                sleep 2
-                puts "Retrying"
-                puts
-                retry
-              end
-
-              raise e
-            ensure
-              debug "Removing thread #{Thread.current.__id__}" if @debug
-
-              @threads.delete(Thread.current)
-              @lock.synchronize { ActiveRecord::Base.connection.close if ActiveRecord::Base.connection }
-            end
-          end
-        end
-
-        @lock_threads.synchronize do
-          threads << thread
-          @threads << thread
+        if @args[:threadded]
+          work_threadded(klass, models)
+        else
+          work_models_through_transaction(klass, models)
         end
       end
     end
-
-    return {
-      threads: threads
-    }
   end
 
   #Waits for any remaining running threads.
@@ -118,6 +85,23 @@ class ActiveRecordTransactioner
   end
 
 private
+
+  def parse_and_set_args
+    @models = {}
+    @threads = []
+    @count = 0
+    @lock = Monitor.new
+    @lock_threads = Monitor.new
+    @lock_models = {}
+
+    if @args[:transaction_size]
+      @transaction_size = @args[:transaction_size].to_i
+    else
+      @transaction_size = 1000
+    end
+
+    @debug = @args[:debug]
+  end
 
   def debug(str)
     puts "{ActiveRecordTransactioner}: #{str}" if @debug
@@ -140,5 +124,46 @@ private
     end
 
     debug "Done waiting." if @debug
+  end
+
+  def work_models_through_transaction(klass, models)
+    @lock_models[klass].synchronize do
+      debug "Opening new transaction by using '#{@args[:transaction_method]}'." if @debug
+
+      klass.__send__(@args[:transaction_method]) do
+        models.each do |work|
+          if work[:type] == :save!
+            validate = work.key?(:validate) ? work[:validate] : true
+            work[:model].save! validate: validate
+          elsif work[:type] == :destroy!
+            work[:model].destroy!
+          else
+            raise "Invalid type: '#{work[:type]}'."
+          end
+        end
+      end
+    end
+  end
+
+  def work_threadded(klass, models)
+    thread = Thread.new do
+      begin
+        work_models_through_transaction(klass, models)
+      ensure
+        debug "Removing thread #{Thread.current.__id__}" if @debug
+
+        @threads.delete(Thread.current)
+        @lock.synchronize { ActiveRecord::Base.connection.close if ActiveRecord::Base.connection }
+      end
+    end
+
+    @lock_threads.synchronize do
+      threads << thread
+      @threads << thread
+    end
+  end
+
+  def should_flush?
+    @count >= @transaction_size
   end
 end
