@@ -6,6 +6,7 @@ class ActiveRecordTransactioner
     call_method: :save!,
     transaction_method: :transaction,
     transaction_size: 1000,
+    threadded: false,
     max_running_threads: 2,
     debug: false
   }
@@ -39,8 +40,8 @@ class ActiveRecordTransactioner
     @lock.synchronize do
       klass = model.class
 
-      @lock_models[klass] = Mutex.new unless @lock_models.key?(klass)
-      @models[klass] = [] unless @models.key?(klass)
+      @lock_models[klass] ||= Mutex.new
+      @models[klass] ||= []
       @models[klass] << model
       @count += 1
     end
@@ -50,43 +51,22 @@ class ActiveRecordTransactioner
 
   #Flushes the specified method on all the queued models in a thread for each type of model.
   def flush
-    threads = []
-    wait_for_threads
+    if @args[:threadded]
+      threads = []
+      wait_for_threads
+    end
 
     @lock.synchronize do
-      @models.each do |klass, val|
-        next if val.empty?
+      @models.each do |klass, models|
+        next if models.empty?
 
-        models = val
         @models[klass] = []
         @count -= models.length
-        thread = nil
 
-        @lock_models[klass].synchronize do
+        if @args[:threadded]
           thread = Thread.new do
             begin
-              @lock_models[klass].synchronize do
-                debug "Opening new transaction by using '#{@args[:transaction_method]}'."
-                klass.__send__(@args[:transaction_method]) do
-                  models.each do |model|
-                    # debug "Saving #{model.class.name}(#{model.id}) with method #{@args[:call_method]}"
-                    model.__send__(@args[:call_method], *@args[:call_args])
-                  end
-                end
-              end
-            rescue => e
-              puts e.inspect
-              puts e.backtrace
-
-              if e.is_a?(NoMethodError) && e.message.to_s.include?("`reverse' for nil:NilClass")
-                puts "Warning: Known Rails reverse error when using transaction - retrying in 2 sec."
-                sleep 2
-                puts "Retrying"
-                puts
-                retry
-              end
-
-              raise e
+              save_models_through_transaction(klass, models)
             ensure
               debug "Removing thread #{Thread.current.__id__}" if @debug
 
@@ -94,18 +74,18 @@ class ActiveRecordTransactioner
               @lock.synchronize { ActiveRecord::Base.connection.close if ActiveRecord::Base.connection }
             end
           end
-        end
 
-        @lock_threads.synchronize do
-          threads << thread
-          @threads << thread
+          @lock_threads.synchronize do
+            threads << thread
+            @threads << thread
+          end
+        else
+          save_models_through_transaction(klass, models)
         end
       end
     end
 
-    return {
-      threads: threads
-    }
+    return {threads: threads}
   end
 
   #Waits for any remaining running threads.
@@ -140,5 +120,18 @@ private
     end
 
     debug "Done waiting." if @debug
+  end
+
+  def save_models_through_transaction(klass, models)
+    @lock_models[klass].synchronize do
+      debug "Opening new transaction by using '#{@args[:transaction_method]}'." if @debug
+
+      klass.__send__(@args[:transaction_method]) do
+        models.each do |model|
+          debug "Saving #{model.class.name}(#{model.id}) with method #{@args[:call_method]}" if @debug
+          model.__send__(@args[:call_method], *@args[:call_args])
+        end
+      end
+    end
   end
 end

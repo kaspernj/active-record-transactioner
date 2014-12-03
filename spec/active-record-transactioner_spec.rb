@@ -2,16 +2,6 @@ require "spec_helper"
 require "tmpdir"
 
 describe "ActiveRecordTransactioner" do
-  before do
-    file_path = "#{Dir.tmpdir}/active_record_transactioner_test.sqlite3"
-    File.unlink(file_path) if File.exists?(file_path)
-
-    ActiveRecord::Base.establish_connection(
-      adapter: "sqlite3",
-      database: file_path
-    )
-  end
-
   it "works" do
     require_relative "test_classes/active-record-transactioner-test-class"
 
