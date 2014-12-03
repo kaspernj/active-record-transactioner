@@ -20,7 +20,7 @@ gem 'active-record-transactioner'
 ActiveRecordTransactioner.new do |trans|
   models.each do |model|
     model.some_attribute = "some_value"
-    trans.queue(model)
+    trans.save!(model)
   end
 end
 ```
@@ -36,7 +36,16 @@ ActiveRecordTransactioner.new(
 ) do |trans|
   models.each do |model|
     model.some_attribute = "some_value"
-    trans.queue(model)
+    trans.save!(model)
+  end
+end
+```
+
+### Destroy
+```ruby
+ActiveRecordTransactioner.new do |trans|
+  models.each do |model|
+    trans.destroy!(model)
   end
 end
 ```
@@ -56,7 +65,7 @@ ActiveRecordTransactioner.new(
 ) do |trans|
   models.each do |model|
     model.some_attribute = "some_value"
-    trans.queue(model)
+    trans.save!(model)
   end
 end
 ```
