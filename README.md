@@ -31,7 +31,28 @@ ActiveRecordTransactioner.new(
   call_args: ["Hello world!"],
   call_method: :save!,
   transaction_method: :transaction,
-  transaction_size: 1000
+  transaction_size: 1000,
+  threadded: false
+) do |trans|
+  models.each do |model|
+    model.some_attribute = "some_value"
+    trans.queue(model)
+  end
+end
+```
+
+### Threadded
+
+The "threadded" and "max_running_threads" options will start new thread to actually do the saving of the models, while continuing to queue up new models for saving in the primary thread. This way the database can utilize multiple cores, and if you use a threadded VM like JRuby or Rubinius, you will utilize even more cores.
+
+This can help greatly speed up the processing.
+
+Be aware that the saving of only one type of model, will be limited to only one thread, so it will make sense to try and queue up as many type of models as possible. Like users, orders and so on.
+
+```ruby
+ActiveRecordTransactioner.new(
+  threadded: false,
+  max_running_threads: 3
 ) do |trans|
   models.each do |model|
     model.some_attribute = "some_value"
