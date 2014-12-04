@@ -60,7 +60,7 @@ Be aware that the saving of only one type of model, will be limited to only one 
 
 ```ruby
 ActiveRecordTransactioner.new(
-  threadded: false,
+  threadded: true,
   max_running_threads: 3
 ) do |trans|
   models.each do |model|
