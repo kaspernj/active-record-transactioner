@@ -4,7 +4,7 @@
 
 # active-record-transactioner
 
-Queue saving of many models into transactions through multiple threads for optimal database-performance in ActiveRecord.
+Queue saving and destroying of many models into transactions through multiple threads for optimal database-performance in ActiveRecord.
 
 ## Install
 
