@@ -1,5 +1,7 @@
 shared_examples_for "basic user operations" do
   before do
+    ActiveRecord::Base.connection.execute("TRUNCATE TABLE users")
+
     transactioner do |trans|
       100.times do |count|
         user = User.new(username: "User #{count}", email: "user#{count}@example.com")

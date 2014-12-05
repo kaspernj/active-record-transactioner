@@ -152,7 +152,9 @@ private
     @lock_threads.synchronize do
       @threads << Thread.new do
         begin
-          work_models_through_transaction(klass, models)
+          ActiveRecord::Base.connection_pool.with_connection do
+            work_models_through_transaction(klass, models)
+          end
         rescue => e
           pute e.inspect
           puts e.backtrace
@@ -161,9 +163,6 @@ private
         ensure
           debug "Removing thread #{Thread.current.__id__}" if @debug
           @lock_threads.synchronize { @threads.delete(Thread.current) }
-
-          debug "Close connection to ActiveRecord." if @debug
-          @lock.synchronize { ActiveRecord::Base.connection.close if ActiveRecord::Base.connection }
 
           debug "Threads count after remove: #{@threads.length}" if @debug
         end

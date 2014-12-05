@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe User do
   def transactioner
-    ActiveRecordTransactioner.new(debug: false, transaction_size: 50, threadded: true) do |transactioner|
+    ActiveRecordTransactioner.new(transaction_size: 50, threadded: true) do |transactioner|
       yield transactioner
     end
   end
