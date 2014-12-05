@@ -5,7 +5,6 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'active_record'
 require 'active-record-transactioner'
-require 'database_cleaner'
 
 ENV["RAILS_ENV"] ||= 'test'
 require_relative "dummy/config/environment"
@@ -24,17 +23,5 @@ RSpec.configure do |config|
 
   config.infer_base_class_for_anonymous_controllers = false
   config.infer_spec_type_from_file_location!
-  config.use_transactional_fixtures = true
-
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+  config.use_transactional_fixtures = false
 end

@@ -4,6 +4,9 @@ archive: true
 rvm:
   - 2.1.2
 before_script:
+  - cp spec/dummy/config/database.shippable.yml spec/dummy/config/database.yml
+  - mysql -e 'DROP DATABASE IF EXISTS transactioner;'
+  - mysql -e 'CREATE DATABASE transactioner;'
   - cd spec/dummy
   - RAILS_ENV=test bundle exec rake db:migrate
   - cd ../..

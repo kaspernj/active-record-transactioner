@@ -8,13 +8,13 @@ source "http://rubygems.org"
 group :development do
   gem "rails", "~> 4.0.10"
   gem "rspec-rails", "~> 3.1.0"
-  gem "database_cleaner"
   gem "rdoc", "~> 3.12"
   gem "bundler", ">= 1.0.0"
   gem "jeweler", ">= 1.8.4"
   gem "builder"
   gem "activerecord"
-  gem "sqlite3"
+  gem "mysql2"
+  gem "pry"
 end
 
 gem "codeclimate-test-reporter", group: :test, require: nil

@@ -24,12 +24,12 @@ class ActiveRecordTransactioner
         yield self
       ensure
         flush
-        join
+        join if threadded?
       end
     end
   end
 
-  #Adds another model to the queue and calls 'flush' if it is over the limit.
+  # Adds another model to the queue and calls 'flush' if it is over the limit.
   def save!(model)
     raise ActiveRecord::RecordInvalid, model unless model.valid?
     queue(model, type: :save!, validate: false)
@@ -39,25 +39,27 @@ class ActiveRecordTransactioner
     queue(model, type: :destroy!)
   end
 
-  #Adds another model to the queue and calls 'flush' if it is over the limit.
+  # Adds another model to the queue and calls 'flush' if it is over the limit.
   def queue(model, args = {})
     args[:type] ||= :save!
 
     @lock.synchronize do
       klass = model.class
 
-      @lock_models[klass] ||= Mutex.new
+      validate = args.key?(:validate) ? args[:validate] : true
+
+      @lock_models[klass] ||= Monitor.new
       @models[klass] ||= []
-      @models[klass] << {model: model, type: args[:type]}
+      @models[klass] << {model: model, type: args[:type], validate: validate}
       @count += 1
     end
 
     flush if should_flush?
   end
 
-  #Flushes the specified method on all the queued models in a thread for each type of model.
+  # Flushes the specified method on all the queued models in a thread for each type of model.
   def flush
-    wait_for_threads if @args[:threadded]
+    wait_for_threads if threadded?
 
     @lock.synchronize do
       @models.each do |klass, models|
@@ -66,7 +68,7 @@ class ActiveRecordTransactioner
         @models[klass] = []
         @count -= models.length
 
-        if @args[:threadded]
+        if threadded?
           work_threadded(klass, models)
         else
           work_models_through_transaction(klass, models)
@@ -75,13 +77,18 @@ class ActiveRecordTransactioner
     end
   end
 
-  #Waits for any remaining running threads.
+  # Waits for any remaining running threads.
   def join
-    @lock_threads.synchronize do
-      @threads.each do |thread|
-        thread.join
-      end
+    threads_to_join = @lock_threads.synchronize { @threads.clone }
+
+    debug "Threads to join: #{threads_to_join}" if @debug
+    threads_to_join.each do |thread|
+      thread.join
     end
+  end
+
+  def threadded?
+    @args[:threadded]
   end
 
 private
@@ -93,31 +100,23 @@ private
     @lock = Monitor.new
     @lock_threads = Monitor.new
     @lock_models = {}
-
-    if @args[:transaction_size]
-      @transaction_size = @args[:transaction_size].to_i
-    else
-      @transaction_size = 1000
-    end
-
+    @max_running_threads = @args[:max_running_threads].to_i
+    @transaction_size = @args[:transaction_size].to_i
     @debug = @args[:debug]
   end
 
   def debug(str)
-    puts "{ActiveRecordTransactioner}: #{str}" if @debug
+    print "{ActiveRecordTransactioner}: #{str}\n" if @debug
   end
 
   def wait_for_threads
     break_loop = false
     while !break_loop
-      debug "Trying to lock..." if @debug
-      @lock.synchronize do
-        debug "Running threads: #{@threads.length} / #{@args[:max_running_threads]}"
-        if @threads.length < @args[:max_running_threads]
-          break_loop = true
-        else
-          debug "Waiting for threads #{@threads.length} / #{@args[:max_running_threads]}" if @debug
-        end
+      debug "Running threads: #{@threads.length} / #{@max_running_threads}" if @debug
+      if allowed_to_start_new_thread?
+        break_loop = true
+      else
+        debug "Waiting for threads #{@threads.length} / #{@max_running_threads}" if @debug
       end
 
       sleep 0.2 unless break_loop
@@ -127,11 +126,16 @@ private
   end
 
   def work_models_through_transaction(klass, models)
+    debug "Synchronizing model: #{klass.name}"
+
     @lock_models[klass].synchronize do
       debug "Opening new transaction by using '#{@args[:transaction_method]}'." if @debug
 
       klass.__send__(@args[:transaction_method]) do
+        debug "Going through models." if @debug
         models.each do |work|
+          debug work if @debug
+
           if work[:type] == :save!
             validate = work.key?(:validate) ? work[:validate] : true
             work[:model].save! validate: validate
@@ -141,29 +145,41 @@ private
             raise "Invalid type: '#{work[:type]}'."
           end
         end
+
+        debug "Done working with models." if @debug
       end
     end
   end
 
   def work_threadded(klass, models)
-    thread = Thread.new do
-      begin
-        work_models_through_transaction(klass, models)
-      ensure
-        debug "Removing thread #{Thread.current.__id__}" if @debug
+    @lock_threads.synchronize do
+      @threads << Thread.new do
+        begin
+          ActiveRecord::Base.connection_pool.with_connection do
+            work_models_through_transaction(klass, models)
+          end
+        rescue => e
+          pute e.inspect
+          puts e.backtrace
 
-        @threads.delete(Thread.current)
-        @lock.synchronize { ActiveRecord::Base.connection.close if ActiveRecord::Base.connection }
+          raise e
+        ensure
+          debug "Removing thread #{Thread.current.__id__}" if @debug
+          @lock_threads.synchronize { @threads.delete(Thread.current) }
+
+          debug "Threads count after remove: #{@threads.length}" if @debug
+        end
       end
     end
 
-    @lock_threads.synchronize do
-      threads << thread
-      @threads << thread
-    end
+    debug "Threads-count after started to work: #{@threads.length}"
   end
 
   def should_flush?
     @count >= @transaction_size
+  end
+
+  def allowed_to_start_new_thread?
+    @lock_threads.synchronize { return @threads.length < @max_running_threads }
   end
 end
