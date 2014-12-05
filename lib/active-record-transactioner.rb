@@ -24,7 +24,7 @@ class ActiveRecordTransactioner
         yield self
       ensure
         flush
-        join if @threadded
+        join if threadded?
       end
     end
   end
@@ -59,7 +59,7 @@ class ActiveRecordTransactioner
 
   # Flushes the specified method on all the queued models in a thread for each type of model.
   def flush
-    wait_for_threads if @threadded
+    wait_for_threads if threadded?
 
     @lock.synchronize do
       @models.each do |klass, models|
@@ -68,7 +68,7 @@ class ActiveRecordTransactioner
         @models[klass] = []
         @count -= models.length
 
-        if @threadded
+        if threadded?
           work_threadded(klass, models)
         else
           work_models_through_transaction(klass, models)
@@ -87,6 +87,10 @@ class ActiveRecordTransactioner
     end
   end
 
+  def threadded?
+    @args[:threadded]
+  end
+
 private
 
   def parse_and_set_args
@@ -98,7 +102,6 @@ private
     @lock_models = {}
     @max_running_threads = @args[:max_running_threads].to_i
     @transaction_size = @args[:transaction_size].to_i
-    @threadded = @args[:threadded]
     @debug = @args[:debug]
   end
 
