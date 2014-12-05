@@ -1,0 +1,7 @@
+test:
+  adapter: mysql2
+  pool: 15
+  timeout: 5000
+  encoding: utf8
+  database: transactioner
+  username: shippa

@@ -14,7 +14,8 @@ group :development do
   gem "jeweler", ">= 1.8.4"
   gem "builder"
   gem "activerecord"
-  gem "sqlite3"
+  gem "mysql2"
+  gem "pry"
 end
 
 gem "codeclimate-test-reporter", group: :test, require: nil
