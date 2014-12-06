@@ -28,8 +28,6 @@ end
 You can also do it a bit more complicated with some custom options.
 ```ruby
 ActiveRecordTransactioner.new(
-  call_args: ["Hello world!"],
-  call_method: :save!,
   transaction_method: :transaction,
   transaction_size: 1000,
   threadded: false
