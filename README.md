@@ -52,9 +52,9 @@ end
 
 ### Threadded
 
-The "threadded" and "max_running_threads" options will start new threads to actually do the saving of the models, while continuing to queue up new models for saving in the primary thread. This way the database can utilize multiple cores, and if you use a threadded VM like JRuby or Rubinius, you will utilize even more cores.
+The "threadded" and "max_running_threads" options will start new threads to do the saving of the models, while continuing to queue up new models in the primary thread. This way the database can utilize multiple cores, and if you use a threadded VM like JRuby or Rubinius, you will utilize even more.
 
-This can help greatly speed up the processing.
+This can help greatly speed up the processing of records.
 
 Be aware that the saving of only one type of model, will be limited to only one thread, so it will make sense to try and queue up as many type of models as possible. Like users, orders and so on.
 
