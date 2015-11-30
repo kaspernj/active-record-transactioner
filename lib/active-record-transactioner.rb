@@ -37,6 +37,19 @@ class ActiveRecordTransactioner
     queue(model, type: :save!, validate: false)
   end
 
+  def bulk_create!(model)
+    attributes = model.attributes
+    attributes.delete("id")
+    attributes.delete("created_at")
+    attributes.delete("updated_at")
+
+    klass = model.class
+    @bulk_creates[klass] ||= []
+    @bulk_creates[klass] << attributes
+
+    @count += 1
+  end
+
   def update_columns(model, updates)
     queue(model, type: :update_columns, validate: false, method_args: [updates])
   end
@@ -79,6 +92,14 @@ class ActiveRecordTransactioner
     wait_for_threads if threadded?
 
     @lock.synchronize do
+      @bulk_creates.each do |klass, attribute_array|
+        if threadded?
+          bulk_insert_attribute_array_threadded(klass, attribute_array)
+        else
+          bulk_insert_attribute_array(klass, attribute_array)
+        end
+      end
+
       @models.each do |klass, models|
         next if models.empty?
 
@@ -110,6 +131,7 @@ private
 
   def parse_and_set_args
     @models = {}
+    @bulk_creates = {}
     @threads = []
     @count = 0
     @lock = Monitor.new
@@ -202,5 +224,71 @@ private
 
   def allowed_to_start_new_thread?
     @lock_threads.synchronize { return @threads.length < @max_running_threads }
+  end
+
+  def bulk_insert_attribute_array_threadded(klass, attribute_array)
+    @lock_threads.synchronize do
+      @threads << Thread.new do
+        begin
+          bulk_insert_attribute_array(klass, attribute_array)
+        rescue => e
+          puts e.inspect
+          puts e.backtrace
+
+          raise e
+        ensure
+          debug "Removing thread #{Thread.current.__id__}" if @debug
+          @lock_threads.synchronize { @threads.delete(Thread.current) }
+
+          debug "Threads count after remove: #{@threads.length}" if @debug
+        end
+      end
+    end
+  end
+
+  def bulk_insert_attribute_array(klass, attribute_array)
+    sql = "INSERT INTO `#{klass.table_name}` ("
+
+    first = true
+    attribute_array.first.each_key do |key|
+      if first
+        first = false
+      else
+        sql << ", "
+      end
+
+      sql << "`#{key}`"
+    end
+
+    sql << ") VALUES ("
+
+    inserts = []
+    first_insert = true
+    attribute_array.each do |attributes|
+      if first_insert
+        first_insert = false
+      else
+        sql << "), ("
+      end
+
+      first_value = true
+      attributes.each_value do |value|
+        if first_value
+          first_value = false
+        else
+          sql << ", "
+        end
+
+        sql << klass.connection.quote(value)
+      end
+    end
+
+    sql << ")"
+
+    klass.connection.execute(sql)
+
+    @lock.synchronize do
+      @count -= attribute_array.length
+    end
   end
 end
