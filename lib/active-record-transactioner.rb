@@ -14,18 +14,18 @@ class ActiveRecordTransactioner
   ALLOWED_ARGS = DEFAULT_ARGS.keys
 
   def initialize(args = {})
-    args.each { |key, val| raise "Invalid key: '#{key}'." unless ALLOWED_ARGS.include?(key) }
+    args.each_key { |key| raise "Invalid key: '#{key}'." unless ALLOWED_ARGS.include?(key) }
 
     @args = DEFAULT_ARGS.merge(args)
     parse_and_set_args
 
-    if block_given?
-      begin
-        yield self
-      ensure
-        flush
-        join if threadded?
-      end
+    return unless block_given?
+
+    begin
+      yield self
+    ensure
+      flush
+      join if threadded?
     end
   end
 
@@ -82,9 +82,7 @@ class ActiveRecordTransactioner
     threads_to_join = @lock_threads.synchronize { @threads.clone }
 
     debug "Threads to join: #{threads_to_join}" if @debug
-    threads_to_join.each do |thread|
-      thread.join
-    end
+    threads_to_join.each(&:join)
   end
 
   def threadded?
@@ -110,16 +108,15 @@ private
   end
 
   def wait_for_threads
-    break_loop = false
-    while !break_loop
+    loop do
       debug "Running threads: #{@threads.length} / #{@max_running_threads}" if @debug
       if allowed_to_start_new_thread?
-        break_loop = true
+        break
       else
         debug "Waiting for threads #{@threads.length} / #{@max_running_threads}" if @debug
       end
 
-      sleep 0.2 unless break_loop
+      sleep 0.2
     end
 
     debug "Done waiting." if @debug

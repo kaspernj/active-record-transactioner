@@ -16,25 +16,25 @@ describe "ActiveRecordTransactioner" do
 
     trans.join
 
-    model1.save_called.should eq true
-    model2.save_called.should eq true
-    model3.save_called.should eq false
+    expect(model1.save_called).to eq true
+    expect(model2.save_called).to eq true
+    expect(model3.save_called).to eq false
 
     called = false
-    ActiveRecordTransactioner.new do |trans|
+    ActiveRecordTransactioner.new do |transactioner|
       called = true
-      trans.class.should eql(ActiveRecordTransactioner)
+      expect(transactioner).to be_a ActiveRecordTransactioner
     end
 
-    called.should eq true
+    expect(called).to eq true
   end
 
-  it "should not fail under the Rails reverse bug" do
+  it "doesnt fail under the Rails reverse bug" do
     trans = ActiveRecordTransactioner.new(transaction_size: 1)
     model1 = ActiveRecordTransactionerTestClass.new
     trans.save!(model1)
     trans.join
 
-    ActiveRecordTransactionerTestClass::ARGS[:nilraise].should eq false
+    expect(ActiveRecordTransactionerTestClass::ARGS[:nilraise]).to eq false
   end
 end

@@ -1,0 +1,4 @@
+---
+inherit_from:
+- "/media/storage/Dev/Ruby/best_practice_project/lib/best_practice_project/config/rubocop.yml"
+- ".rubocop_todo.yml"

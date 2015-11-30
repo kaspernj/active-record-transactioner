@@ -1,7 +1,5 @@
 test:
-  adapter: mysql2
-  pool: 15
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
   timeout: 5000
-  username: username
-  password: password
-  database: transactioner-test
