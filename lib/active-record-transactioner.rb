@@ -262,7 +262,6 @@ private
 
     sql << ") VALUES ("
 
-    inserts = []
     first_insert = true
     attribute_array.each do |attributes|
       if first_insert
