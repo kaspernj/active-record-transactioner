@@ -146,26 +146,30 @@ private
       debug "Opening new transaction by using '#{@args[:transaction_method]}'." if @debug
 
       klass.__send__(@args[:transaction_method]) do
-        debug "Going through models." if @debug
-        models.each do |work|
-          debug work if @debug
-
-          work_type = work.fetch(:type)
-          model = work.fetch(:model)
-
-          if work_type == :save!
-            validate = work.key?(:validate) ? work[:validate] : true
-            model.save! validate: validate
-          elsif work_type == :update_columns || work_type == :destroy!
-            model.__send__(work_type, *work.fetch(:method_args))
-          else
-            raise "Invalid type: '#{work[:type]}'."
-          end
-        end
-
-        debug "Done working with models." if @debug
+        work_models(models)
       end
     end
+  end
+
+  def work_models(models)
+    debug "Going through models." if @debug
+    models.each do |work|
+      debug work if @debug
+
+      work_type = work.fetch(:type)
+      model = work.fetch(:model)
+
+      if work_type == :save!
+        validate = work.key?(:validate) ? work[:validate] : true
+        model.save! validate: validate
+      elsif work_type == :update_columns || work_type == :destroy!
+        model.__send__(work_type, *work.fetch(:method_args))
+      else
+        raise "Invalid type: '#{work[:type]}'."
+      end
+    end
+
+    debug "Done working with models." if @debug
   end
 
   def work_threadded(klass, models)
