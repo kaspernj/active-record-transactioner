@@ -1,19 +1,19 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'active_record'
-require 'active-record-transactioner'
-require 'database_cleaner'
+require "active_record"
+require "active-record-transactioner"
+require "database_cleaner"
 
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 require_relative "dummy/config/environment"
-require 'rspec/rails'
+require "rspec/rails"
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 

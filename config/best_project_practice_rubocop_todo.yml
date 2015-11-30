@@ -7,13 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'spec/test_classes/active-record-transactioner-test-class.rb'
-
-# Offense count: 1
 Metrics/AbcSize:
   Max: 26
 
@@ -22,40 +15,8 @@ Metrics/CyclomaticComplexity:
   Max: 8
 
 # Offense count: 1
-# Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
-  Max: 174
-
-# Offense count: 1
 Metrics/PerceivedComplexity:
   Max: 9
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/BarePercentLiterals:
-  Exclude:
-    - 'Rakefile'
-
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'spec/dummy/config/application.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/ExtraSpacing:
-  Exclude:
-    - 'spec/dummy/bin/rails'
-    - 'spec/dummy/config.ru'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues.
-Style/HashSyntax:
-  Enabled: false
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -68,33 +29,7 @@ Style/MultilineIfThen:
 # Configuration parameters: PreferredDelimiters.
 Style/PercentLiteralDelimiters:
   Exclude:
-    - 'Rakefile'
     - 'active-record-transactioner.gemspec'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/PercentQLiterals:
-  Exclude:
-    - 'Rakefile'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'spec/test_classes/active-record-transactioner-test-class.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-Style/SpaceInsideBlockBraces:
-  Enabled: false
-
-# Offense count: 43
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/StringLiterals:
-  Enabled: false
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -102,11 +37,9 @@ Style/StringLiterals:
 Style/TrailingBlankLines:
   Exclude:
     - 'active-record-transactioner.gemspec'
-    - 'spec/dummy/config/application.rb'
 
 # Offense count: 29
 # Cop supports --auto-correct.
 Style/UnneededPercentQ:
   Exclude:
-    - 'Rakefile'
     - 'active-record-transactioner.gemspec'
