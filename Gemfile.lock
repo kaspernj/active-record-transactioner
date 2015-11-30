@@ -1,5 +1,6 @@
-PATH
-  remote: /home/kaspernj/Dev/Ruby/best_practice_project
+GIT
+  remote: git://github.com/kaspernj/best_practice_project.git
+  revision: dbabe855debb1a6c68ef4c400deaec3c96418cef
   specs:
     best_practice_project (0.0.4)
       psych (~> 2.0.0)

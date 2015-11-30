@@ -15,7 +15,7 @@ group :development do
   gem "activerecord"
   gem "sqlite3"
   gem "pry"
-  gem "best_practice_project", path: "/home/kaspernj/Dev/Ruby/best_practice_project"
+  gem "best_practice_project", github: "kaspernj/best_practice_project" # path: "/home/kaspernj/Dev/Ruby/best_practice_project"
   gem "rubocop", "0.35.1"
   gem "database_cleaner"
 end
