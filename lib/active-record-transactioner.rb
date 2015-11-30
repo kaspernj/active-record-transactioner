@@ -11,21 +11,23 @@ class ActiveRecordTransactioner
     debug: false
   }
 
+  EMPTY_ARGS = []
+
   ALLOWED_ARGS = DEFAULT_ARGS.keys
 
   def initialize(args = {})
-    args.each { |key, val| raise "Invalid key: '#{key}'." unless ALLOWED_ARGS.include?(key) }
+    args.each_key { |key| raise "Invalid key: '#{key}'." unless ALLOWED_ARGS.include?(key) }
 
     @args = DEFAULT_ARGS.merge(args)
     parse_and_set_args
 
-    if block_given?
-      begin
-        yield self
-      ensure
-        flush
-        join if threadded?
-      end
+    return unless block_given?
+
+    begin
+      yield self
+    ensure
+      flush
+      join if threadded?
     end
   end
 
@@ -33,6 +35,14 @@ class ActiveRecordTransactioner
   def save!(model)
     raise ActiveRecord::RecordInvalid, model unless model.valid?
     queue(model, type: :save!, validate: false)
+  end
+
+  def update_columns(model, updates)
+    queue(model, type: :update_columns, validate: false, method_args: [updates])
+  end
+
+  def update_column(model, column_name, new_value)
+    update_columns(model, column_name => new_value)
   end
 
   def destroy!(model)
@@ -49,8 +59,15 @@ class ActiveRecordTransactioner
       validate = args.key?(:validate) ? args[:validate] : true
 
       @lock_models[klass] ||= Monitor.new
+
       @models[klass] ||= []
-      @models[klass] << {model: model, type: args[:type], validate: validate}
+      @models[klass] << {
+        model: model,
+        type: args.fetch(:type),
+        validate: validate,
+        method_args: args[:method_args] || EMPTY_ARGS
+      }
+
       @count += 1
     end
 
@@ -82,9 +99,7 @@ class ActiveRecordTransactioner
     threads_to_join = @lock_threads.synchronize { @threads.clone }
 
     debug "Threads to join: #{threads_to_join}" if @debug
-    threads_to_join.each do |thread|
-      thread.join
-    end
+    threads_to_join.each(&:join)
   end
 
   def threadded?
@@ -110,16 +125,15 @@ private
   end
 
   def wait_for_threads
-    break_loop = false
-    while !break_loop
+    loop do
       debug "Running threads: #{@threads.length} / #{@max_running_threads}" if @debug
       if allowed_to_start_new_thread?
-        break_loop = true
+        break
       else
         debug "Waiting for threads #{@threads.length} / #{@max_running_threads}" if @debug
       end
 
-      sleep 0.2 unless break_loop
+      sleep 0.2
     end
 
     debug "Done waiting." if @debug
@@ -132,23 +146,30 @@ private
       debug "Opening new transaction by using '#{@args[:transaction_method]}'." if @debug
 
       klass.__send__(@args[:transaction_method]) do
-        debug "Going through models." if @debug
-        models.each do |work|
-          debug work if @debug
-
-          if work[:type] == :save!
-            validate = work.key?(:validate) ? work[:validate] : true
-            work[:model].save! validate: validate
-          elsif work[:type] == :destroy!
-            work[:model].destroy!
-          else
-            raise "Invalid type: '#{work[:type]}'."
-          end
-        end
-
-        debug "Done working with models." if @debug
+        work_models(models)
       end
     end
+  end
+
+  def work_models(models)
+    debug "Going through models." if @debug
+    models.each do |work|
+      debug work if @debug
+
+      work_type = work.fetch(:type)
+      model = work.fetch(:model)
+
+      if work_type == :save!
+        validate = work.key?(:validate) ? work[:validate] : true
+        model.save! validate: validate
+      elsif work_type == :update_columns || work_type == :destroy!
+        model.__send__(work_type, *work.fetch(:method_args))
+      else
+        raise "Invalid type: '#{work[:type]}'."
+      end
+    end
+
+    debug "Done working with models." if @debug
   end
 
   def work_threadded(klass, models)
@@ -159,7 +180,7 @@ private
             work_models_through_transaction(klass, models)
           end
         rescue => e
-          pute e.inspect
+          puts e.inspect
           puts e.backtrace
 
           raise e

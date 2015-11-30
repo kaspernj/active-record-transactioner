@@ -39,6 +39,15 @@ ActiveRecordTransactioner.new(
 end
 ```
 
+### Update columns
+```ruby
+ActiveRecordTransactioner.new do |trans|
+  models.each do |model|
+    trans.update_columns(model, some_column: "new_value")
+  end
+end
+```
+
 ### Destroy
 ```ruby
 ActiveRecordTransactioner.new do |trans|
@@ -69,7 +78,7 @@ end
 ```
 
 ## Contributing to active-record-transactioner
- 
+
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
 * Fork the project.

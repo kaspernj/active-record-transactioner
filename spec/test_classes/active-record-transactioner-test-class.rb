@@ -8,7 +8,7 @@ class ActiveRecordTransactionerTestClass
   end
 
   def self.transaction
-    Thread.current[:trans] = self.name
+    Thread.current[:trans] = name
 
     begin
       yield
@@ -17,7 +17,7 @@ class ActiveRecordTransactionerTestClass
     end
   end
 
-  def save!(args = {})
+  def save!(_args = {})
     raise "Failure - no transaction: #{Thread.current[:trans]}, #{self.class.name}" if Thread.current[:trans] != self.class.name
     @save_called = true
   end
