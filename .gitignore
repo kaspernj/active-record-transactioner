@@ -51,3 +51,7 @@ pkg
 spec/dummy/db/*.sqlite3
 spec/dummy/log/*.log
 spec/dummy/config/database.yml
+
+# BestPracticeProject
+.rubocop.yml
+.rubocop_todo.yml
