@@ -7,5 +7,6 @@ before_script:
   - cp spec/dummy/config/database.shippable.yml spec/dummy/config/database.yml
 script:
   - CODECLIMATE_REPO_TOKEN=b7d9c971bea2879b81bdf35f600b985bf3a016c6104169b2c29c213a5d2e7142 bundle exec rspec
+  - bundle exec rake best_practice_project:run
 notifications:
    email: false
