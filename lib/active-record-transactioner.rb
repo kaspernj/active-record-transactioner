@@ -11,6 +11,8 @@ class ActiveRecordTransactioner
     debug: false
   }
 
+  EMPTY_ARGS = []
+
   ALLOWED_ARGS = DEFAULT_ARGS.keys
 
   def initialize(args = {})
@@ -35,6 +37,14 @@ class ActiveRecordTransactioner
     queue(model, type: :save!, validate: false)
   end
 
+  def update_columns(model, updates)
+    queue(model, type: :update_columns, validate: false, method_args: [updates])
+  end
+
+  def update_column(model, column_name, new_value)
+    update_columns(model, column_name => new_value)
+  end
+
   def destroy!(model)
     queue(model, type: :destroy!)
   end
@@ -49,8 +59,15 @@ class ActiveRecordTransactioner
       validate = args.key?(:validate) ? args[:validate] : true
 
       @lock_models[klass] ||= Monitor.new
+
       @models[klass] ||= []
-      @models[klass] << {model: model, type: args[:type], validate: validate}
+      @models[klass] << {
+        model: model,
+        type: args.fetch(:type),
+        validate: validate,
+        method_args: args[:method_args] || EMPTY_ARGS
+      }
+
       @count += 1
     end
 
@@ -133,11 +150,14 @@ private
         models.each do |work|
           debug work if @debug
 
-          if work[:type] == :save!
+          work_type = work.fetch(:type)
+          model = work.fetch(:model)
+
+          if work_type == :save!
             validate = work.key?(:validate) ? work[:validate] : true
-            work[:model].save! validate: validate
-          elsif work[:type] == :destroy!
-            work[:model].destroy!
+            model.save! validate: validate
+          elsif work_type == :update_columns || work_type == :destroy!
+            model.__send__(work_type, *work.fetch(:method_args))
           else
             raise "Invalid type: '#{work[:type]}'."
           end
@@ -156,7 +176,7 @@ private
             work_models_through_transaction(klass, models)
           end
         rescue => e
-          pute e.inspect
+          puts e.inspect
           puts e.backtrace
 
           raise e

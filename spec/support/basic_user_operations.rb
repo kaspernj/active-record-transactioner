@@ -17,6 +17,7 @@ shared_examples_for "basic user operations" do
       200.times do |count|
         user = User.find_or_initialize_by(email: "user#{count}@example.com")
         user.username = "User upsert #{count}"
+
         trans.save!(user)
       end
     end
@@ -28,6 +29,24 @@ shared_examples_for "basic user operations" do
     end
 
     expect(User.count).to eq 200
+  end
+
+  it "#update_columns" do
+    transactioner do |trans|
+      count = 0
+      User.find_each do |user|
+        trans.update_columns(user, email: "test#{count}@example.com")
+        count += 1
+      end
+    end
+
+    count = 0
+    User.find_each do |user|
+      expect(user.email).to eq "test#{count}@example.com"
+      count += 1
+    end
+
+    expect(User.count).to eq 100
   end
 
   it "can delete a lot of records" do
