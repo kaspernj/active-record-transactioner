@@ -52,7 +52,7 @@ end
 ```ruby
 ActiveRecordTransactioner.new do |trans|
   1000.times do |count|
-     trans.bulk_create!(User.new(email: "test#{count}@example.com"))
+    trans.bulk_create!(User.new(email: "test#{count}@example.com"))
   end
 end
 ```
