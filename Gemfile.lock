@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/kaspernj/best_practice_project.git
-  revision: dbabe855debb1a6c68ef4c400deaec3c96418cef
+  revision: a733a53ffa7fcf2af0b49c30fa7d949579319782
   specs:
-    best_practice_project (0.0.4)
+    best_practice_project (0.0.5)
       psych (~> 2.0.0)
 
 GEM
@@ -83,6 +83,7 @@ GEM
     multi_json (1.10.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    mysql2 (0.4.2)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     oauth2 (0.9.3)
@@ -177,6 +178,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   database_cleaner
   jeweler (>= 1.8.4)
+  mysql2 (= 0.4.2)
   pry
   rails (~> 4.0.10)
   rdoc (~> 3.12)
