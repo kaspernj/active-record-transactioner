@@ -1,2 +1,7 @@
 ---
 inherit_from: best_project_practice_rubocop_todo.yml
+
+AllCops:
+  Exclude:
+    - active-record-transactioner.gemspec
+    - spec/dummy/db/schema.rb

@@ -48,6 +48,15 @@ ActiveRecordTransactioner.new do |trans|
 end
 ```
 
+### Inserts in a single SQL statement (bulk inserts)
+```ruby
+ActiveRecordTransactioner.new do |trans|
+  1000.times do |count|
+    trans.bulk_create!(User.new(email: "test#{count}@example.com"))
+  end
+end
+```
+
 ### Destroy
 ```ruby
 ActiveRecordTransactioner.new do |trans|

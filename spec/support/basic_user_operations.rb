@@ -58,4 +58,22 @@ shared_examples_for "basic user operations" do
 
     expect(User.count).to eq 50
   end
+
+  it "does bulk inserts" do
+    User.delete_all
+
+    transactioner do |trans|
+      300.times do |count|
+        trans.bulk_create!(User.new(email: "test#{count}@example.com"))
+      end
+    end
+
+    count = 0
+    User.order(:id).each do |user|
+      expect(user.email).to eq "test#{count}@example.com"
+      count += 1
+    end
+
+    expect(count).to eq 300
+  end
 end
