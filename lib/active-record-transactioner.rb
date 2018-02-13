@@ -20,6 +20,7 @@ class ActiveRecordTransactioner
 
     @args = DEFAULT_ARGS.merge(args)
     parse_and_set_args
+    detect_database_syntax
 
     return unless block_given?
 
@@ -129,6 +130,16 @@ class ActiveRecordTransactioner
 
 private
 
+  def detect_database_syntax
+    if postgres?
+      @table_quote = '"'
+      @column_quote = '"'
+    else
+      @table_quote = "`"
+      @column_quote = "`"
+    end
+  end
+
   def parse_and_set_args
     @models = {}
     @bulk_creates = {}
@@ -144,6 +155,10 @@ private
 
   def debug(str)
     print "{ActiveRecordTransactioner}: #{str}\n" if @debug
+  end
+
+  def postgres?
+    ActiveRecord::Base.connection.adapter_name == "PostgreSQL"
   end
 
   def wait_for_threads
@@ -247,7 +262,7 @@ private
   end
 
   def bulk_insert_attribute_array(klass, attribute_array)
-    sql = "INSERT INTO `#{klass.table_name}` ("
+    sql = "INSERT INTO #{@table_quote}#{klass.table_name}#{@table_quote} ("
 
     first = true
     attribute_array.first.each_key do |key|
@@ -257,7 +272,7 @@ private
         sql << ", "
       end
 
-      sql << "`#{key}`"
+      sql << "#{@column_quote}#{key}#{@column_quote}"
     end
 
     sql << ") VALUES ("
