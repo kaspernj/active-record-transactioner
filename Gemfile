@@ -16,7 +16,7 @@ group :development do
   gem "sqlite3", "1.3.11"
   gem "mysql2", "0.3.20"
   gem "pry"
-  gem "best_practice_project", github: "kaspernj/best_practice_project" # path: "/home/kaspernj/Dev/Ruby/best_practice_project"
+  gem "best_practice_project"
   gem "rubocop", "0.35.1"
   gem "database_cleaner"
 end
