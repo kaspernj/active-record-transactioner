@@ -13,7 +13,7 @@ group :development do
   gem "jeweler", ">= 1.8.4"
   gem "builder"
   gem "activerecord"
-  gem "sqlite3", "1.3.11"
+  gem "sqlite3", "1.4.1"
   gem "mysql2", "0.3.20"
   gem "pry"
   gem "best_practice_project"
