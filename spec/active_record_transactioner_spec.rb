@@ -3,7 +3,7 @@ require "tmpdir"
 
 describe "ActiveRecordTransactioner" do
   it "works" do
-    require_relative "test_classes/active-record-transactioner-test-class"
+    require_relative "test_classes/active_record_transactioner_test_class"
 
     trans = ActiveRecordTransactioner.new(transaction_size: 2)
 

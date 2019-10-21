@@ -35,7 +35,7 @@ shared_examples_for "basic user operations" do
     transactioner do |trans|
       count = 0
       User.find_each do |user|
-        trans.update_columns(user, email: "test#{count}@example.com")
+        trans.update_columns(user, email: "test#{count}@example.com") # rubocop:disable Rails/SkipsModelValidations
         count += 1
       end
     end

@@ -1,3 +1,6 @@
+# rubocop:disable Naming/FileName
+# rubocop:enable Naming/FileName
+
 require "monitor"
 
 class ActiveRecordTransactioner
@@ -9,9 +12,9 @@ class ActiveRecordTransactioner
     threadded: false,
     max_running_threads: 2,
     debug: false
-  }
+  }.freeze
 
-  EMPTY_ARGS = []
+  EMPTY_ARGS = [].freeze
 
   ALLOWED_ARGS = DEFAULT_ARGS.keys
 
@@ -35,6 +38,7 @@ class ActiveRecordTransactioner
   # Adds another model to the queue and calls 'flush' if it is over the limit.
   def save!(model)
     raise ActiveRecord::RecordInvalid, model unless model.valid?
+
     queue(model, type: :save!, validate: false)
   end
 
@@ -56,7 +60,7 @@ class ActiveRecordTransactioner
   end
 
   def update_column(model, column_name, new_value)
-    update_columns(model, column_name => new_value)
+    update_columns(model, column_name => new_value) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def destroy!(model)
@@ -154,7 +158,7 @@ private
   end
 
   def debug(str)
-    print "{ActiveRecordTransactioner}: #{str}\n" if @debug
+    print "{ActiveRecordTransactioner}: #{str}\n" if @debug # rubocop:disable Rails/Output
   end
 
   def postgres?
@@ -164,10 +168,11 @@ private
   def wait_for_threads
     loop do
       debug "Running threads: #{@threads.length} / #{@max_running_threads}" if @debug
+
       if allowed_to_start_new_thread?
         break
-      else
-        debug "Waiting for threads #{@threads.length} / #{@max_running_threads}" if @debug
+      elsif @debug
+        debug "Waiting for threads #{@threads.length} / #{@max_running_threads}"
       end
 
       sleep 0.2
@@ -212,21 +217,19 @@ private
   def work_threadded(klass, models)
     @lock_threads.synchronize do
       @threads << Thread.new do
-        begin
-          ActiveRecord::Base.connection_pool.with_connection do
-            work_models_through_transaction(klass, models)
-          end
-        rescue => e
-          puts e.inspect
-          puts e.backtrace
-
-          raise e
-        ensure
-          debug "Removing thread #{Thread.current.__id__}" if @debug
-          @lock_threads.synchronize { @threads.delete(Thread.current) }
-
-          debug "Threads count after remove: #{@threads.length}" if @debug
+        ActiveRecord::Base.connection_pool.with_connection do
+          work_models_through_transaction(klass, models)
         end
+      rescue StandardError => e
+        puts e.inspect # rubocop:disable Rails/Output
+        puts e.backtrace # rubocop:disable Rails/Output
+
+        raise e
+      ensure
+        debug "Removing thread #{Thread.current.__id__}" if @debug
+        @lock_threads.synchronize { @threads.delete(Thread.current) }
+
+        debug "Threads count after remove: #{@threads.length}" if @debug
       end
     end
 
@@ -244,19 +247,17 @@ private
   def bulk_insert_attribute_array_threadded(klass, attribute_array)
     @lock_threads.synchronize do
       @threads << Thread.new do
-        begin
-          bulk_insert_attribute_array(klass, attribute_array)
-        rescue => e
-          puts e.inspect
-          puts e.backtrace
+        bulk_insert_attribute_array(klass, attribute_array)
+      rescue StandardError => e
+        puts e.inspect # rubocop:disable Rails/Output
+        puts e.backtrace # rubocop:disable Rails/Output
 
-          raise e
-        ensure
-          debug "Removing thread #{Thread.current.__id__}" if @debug
-          @lock_threads.synchronize { @threads.delete(Thread.current) }
+        raise e
+      ensure
+        debug "Removing thread #{Thread.current.__id__}" if @debug
+        @lock_threads.synchronize { @threads.delete(Thread.current) }
 
-          debug "Threads count after remove: #{@threads.length}" if @debug
-        end
+        debug "Threads count after remove: #{@threads.length}" if @debug
       end
     end
   end

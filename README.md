@@ -1,7 +1,3 @@
-[![Code Climate](https://codeclimate.com/github/kaspernj/active-record-transactioner/badges/gpa.svg)](https://codeclimate.com/github/kaspernj/active-record-transactioner)
-[![Test Coverage](https://codeclimate.com/github/kaspernj/active-record-transactioner/badges/coverage.svg)](https://codeclimate.com/github/kaspernj/active-record-transactioner)
-[![Build Status](https://img.shields.io/shippable/540e7b993479c5ea8f9ec1f2.svg)](https://app.shippable.com/projects/540e7b993479c5ea8f9ec1f2/builds/latest)
-
 # active-record-transactioner
 
 Queue saving and destroying of many models into transactions through multiple threads for optimal database-performance in ActiveRecord.

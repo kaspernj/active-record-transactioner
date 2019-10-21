@@ -5,22 +5,22 @@ source "http://rubygems.org"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
-group :development do
-  gem "rails", "~> 4.0.10"
-  gem "rspec-rails", "~> 3.4.0"
-  gem "rdoc", "~> 3.12"
-  gem "bundler", ">= 1.0.0"
-  gem "jeweler", ">= 1.8.4"
-  gem "builder"
+group :development, :test do
   gem "activerecord"
-  gem "sqlite3", "1.3.11"
-  gem "mysql2", "0.3.20"
-  gem "pry"
-  gem "best_practice_project"
-  gem "rubocop", "0.35.1"
+  gem "best_practice_project", git: "https://github.com/kaspernj/best_practice_project.git"
+  gem "builder"
+  gem "bundler"
   gem "database_cleaner"
-end
-
-group :test do
-  gem "codeclimate-test-reporter", require: nil
+  gem "jeweler"
+  gem "mysql2"
+  gem "pry"
+  gem "rails", ">= 5.0"
+  gem "rdoc"
+  gem "rspec-rails"
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "sqlite3"
+  gem "tzinfo-data"
 end
