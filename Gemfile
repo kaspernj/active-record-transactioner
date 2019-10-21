@@ -20,7 +20,3 @@ group :development do
   gem "rubocop", "0.35.1"
   gem "database_cleaner"
 end
-
-group :test do
-  gem "codeclimate-test-reporter", require: nil
-end

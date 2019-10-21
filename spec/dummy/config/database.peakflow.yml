@@ -1,5 +1,5 @@
 test:
   adapter: mysql2
   encoding: utf8
-  database: shippa
-  username: shippa
+  database: build
+  username: build
