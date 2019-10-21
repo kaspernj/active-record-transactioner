@@ -17,7 +17,7 @@ group :development do
   gem "mysql2", "0.3.20"
   gem "pry"
   gem "best_practice_project"
-  gem "rubocop", "0.35.1"
+  gem "rubocop", "0.49.0"
   gem "database_cleaner"
 end
 
