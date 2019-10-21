@@ -14,7 +14,7 @@ group :development do
   gem "builder"
   gem "activerecord"
   gem "sqlite3", "1.3.11"
-  gem "mysql2", "0.3.20"
+  gem "mysql2", "0.5.2"
   gem "pry"
   gem "best_practice_project"
   gem "rubocop", "0.35.1"
