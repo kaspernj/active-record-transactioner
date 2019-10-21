@@ -7,7 +7,7 @@ source "http://rubygems.org"
 # Include everything needed to run rake, tests, features, etc.
 group :development, :test do
   gem "activerecord"
-  gem "best_practice_project"
+  gem "best_practice_project", git: "https://github.com/kaspernj/best_practice_project.git"
   gem "builder"
   gem "bundler"
   gem "database_cleaner"
