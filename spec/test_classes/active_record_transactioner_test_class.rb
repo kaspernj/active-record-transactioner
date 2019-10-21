@@ -1,7 +1,7 @@
 class ActiveRecordTransactionerTestClass
   attr_reader :save_called, :args
 
-  ARGS = {nilraise: false}
+  ARGS = {nilraise: false}.freeze
 
   def initialize
     @save_called = false
@@ -19,6 +19,7 @@ class ActiveRecordTransactionerTestClass
 
   def save!(_args = {})
     raise "Failure - no transaction: #{Thread.current[:trans]}, #{self.class.name}" if Thread.current[:trans] != self.class.name
+
     @save_called = true
   end
 

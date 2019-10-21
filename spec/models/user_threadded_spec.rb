@@ -7,5 +7,5 @@ describe User do
     end
   end
 
-  it_should_behave_like "basic user operations"
+  it_behaves_like "basic user operations"
 end
