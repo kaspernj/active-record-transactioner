@@ -67,7 +67,7 @@ GEM
     ast (2.4.0)
     auto_autoloader (0.0.5)
       string-cases
-    builder (3.2.3)
+    builder (3.2.4)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     crass (1.0.5)
