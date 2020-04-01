@@ -1,5 +1,7 @@
 test:
   adapter: mysql2
   encoding: utf8
-  database: build
+  host: mysql
+  database: active_record_transactioner_test
   username: build
+  password: password
