@@ -69,7 +69,7 @@ GEM
       string-cases
     builder (3.2.4)
     coderay (1.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
     database_cleaner (1.8.5)
     descendants_tracker (0.0.4)
@@ -90,7 +90,7 @@ GEM
       activesupport (>= 4.2.0)
     hashie (3.6.0)
     highline (2.0.3)
-    i18n (1.8.3)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jeweler (2.3.9)
       builder
@@ -116,7 +116,7 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.14.2)
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -201,10 +201,10 @@ GEM
       parser (>= 2.7.1.4)
     rubocop-performance (1.7.1)
       rubocop (>= 0.82.0)
-    rubocop-rails (2.6.0)
+    rubocop-rails (2.7.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 0.82.0)
+      rubocop (>= 0.87.0)
     rubocop-rspec (1.43.2)
       rubocop (~> 0.87)
     ruby-progressbar (1.10.1)
@@ -228,7 +228,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
