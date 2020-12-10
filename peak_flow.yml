@@ -1,5 +1,3 @@
-before_install:
-  - sudo apt-get install libmysqlclient-dev
 before_script:
   - wait-for-it mysql:3306
   - cd spec/dummy && cp config/database.peakflow.yml config/database.yml
