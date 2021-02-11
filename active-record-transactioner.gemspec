@@ -90,7 +90,7 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rails>, ["~> 4.0.10"])
+      s.add_development_dependency(%q<rails>, "~> 6.1.2")
       s.add_development_dependency(%q<rspec-rails>, "~> 4.0.0")
       s.add_development_dependency(%q<rdoc>, "~> 6.2")
       s.add_development_dependency(%q<bundler>, [">= 1.0.0"])
@@ -104,7 +104,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rubocop>, "= 1.7.0")
       s.add_development_dependency(%q<database_cleaner>, [">= 0"])
     else
-      s.add_dependency(%q<rails>, ["~> 4.0.10"])
+      s.add_dependency(%q<rails>, "~> 6.1.2")
       s.add_dependency(%q<rspec-rails>, "~> 4.0.0")
       s.add_dependency(%q<rdoc>, "~> 6.2")
       s.add_dependency(%q<bundler>, [">= 1.0.0"])
@@ -119,7 +119,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<database_cleaner>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rails>, ["~> 4.0.10"])
+    s.add_dependency(%q<rails>, "~> 6.1.2")
     s.add_dependency(%q<rspec-rails>, "~> 4.0.0")
     s.add_dependency(%q<rdoc>, "~> 6.2")
     s.add_dependency(%q<bundler>, [">= 1.0.0"])
