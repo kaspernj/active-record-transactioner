@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/kaspernj/best_practice_project.git
-  revision: 4c6c3f70593cafab53e70bed20b67685aa7f12aa
+  revision: 5a2ef2dab64b5efa4ba07aef9f57fb500102e02f
   specs:
     best_practice_project (0.0.11)
       auto_autoloader (>= 0.0.5)
