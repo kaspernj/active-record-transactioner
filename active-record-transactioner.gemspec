@@ -91,7 +91,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rails>, "~> 6.1.3")
-      s.add_development_dependency(%q<rspec-rails>, "~> 5.0.1")
+      s.add_development_dependency(%q<rspec-rails>, "~> 5.1.0")
       s.add_development_dependency(%q<rdoc>, "~> 6.2")
       s.add_development_dependency(%q<bundler>, [">= 1.0.0"])
       s.add_development_dependency(%q<jeweler>, [">= 1.8.4"])
@@ -105,7 +105,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<database_cleaner>, [">= 0"])
     else
       s.add_dependency(%q<rails>, "~> 6.1.3")
-      s.add_dependency(%q<rspec-rails>, "~> 5.0.1")
+      s.add_dependency(%q<rspec-rails>, "~> 5.1.0")
       s.add_dependency(%q<rdoc>, "~> 6.2")
       s.add_dependency(%q<bundler>, [">= 1.0.0"])
       s.add_dependency(%q<jeweler>, [">= 1.8.4"])
@@ -120,7 +120,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<rails>, "~> 6.1.3")
-    s.add_dependency(%q<rspec-rails>, "~> 5.0.1")
+    s.add_dependency(%q<rspec-rails>, "~> 5.1.0")
     s.add_dependency(%q<rdoc>, "~> 6.2")
     s.add_dependency(%q<bundler>, [">= 1.0.0"])
     s.add_dependency(%q<jeweler>, [">= 1.8.4"])
