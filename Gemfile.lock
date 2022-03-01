@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/kaspernj/best_practice_project.git
-  revision: d63f1a709e6061f525a3d4ad4a810907b5493cb4
+  revision: f5441a25bca5f4415f47ee4d5156c75fc1dc0573
   specs:
     best_practice_project (0.0.12)
       auto_autoloader (>= 0.0.5)
@@ -162,7 +162,7 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     parallel (1.21.0)
-    parser (3.1.0.0)
+    parser (3.1.1.0)
       ast (~> 2.4.1)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -203,7 +203,7 @@ GEM
     rake (13.0.6)
     rdoc (6.4.0)
       psych (>= 4.0.0)
-    regexp_parser (2.2.0)
+    regexp_parser (2.2.1)
     rexml (3.2.5)
     rspec-core (3.10.2)
       rspec-support (~> 3.10.0)
@@ -222,7 +222,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.3)
-    rubocop (1.25.0)
+    rubocop (1.25.1)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -231,8 +231,8 @@ GEM
       rubocop-ast (>= 1.15.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.15.1)
-      parser (>= 3.0.1.1)
+    rubocop-ast (1.16.0)
+      parser (>= 3.1.1.0)
     rubocop-performance (1.13.2)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
@@ -240,7 +240,7 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (2.8.0)
+    rubocop-rspec (2.9.0)
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     semver2 (3.4.2)
@@ -284,4 +284,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.17.3
+   2.3.8
