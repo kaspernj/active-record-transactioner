@@ -23,7 +23,7 @@ shared_examples_for "basic user operations" do
     end
 
     count = 0
-    User.find_each do |user|
+    User.order(:id).each do |user|
       expect(user.email).to eq "user#{count}@example.com"
       count += 1
     end
