@@ -101,7 +101,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<mysql2>, "= 0.5.3")
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<best_practice_project>, [">= 0"])
-      s.add_development_dependency(%q<rubocop>, "= 1.25.0")
+      s.add_development_dependency(%q<rubocop>, "= 1.25.1")
       s.add_development_dependency(%q<database_cleaner>, [">= 0"])
     else
       s.add_dependency(%q<rails>, "~> 6.1.3")
@@ -115,7 +115,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<mysql2>, "= 0.5.3")
       s.add_dependency(%q<pry>, [">= 0"])
       s.add_dependency(%q<best_practice_project>, [">= 0"])
-      s.add_dependency(%q<rubocop>, "= 1.25.0")
+      s.add_dependency(%q<rubocop>, "= 1.25.1")
       s.add_dependency(%q<database_cleaner>, [">= 0"])
     end
   else
@@ -130,7 +130,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<mysql2>, "= 0.5.3")
     s.add_dependency(%q<pry>, [">= 0"])
     s.add_dependency(%q<best_practice_project>, [">= 0"])
-    s.add_dependency(%q<rubocop>, "= 1.25.0")
+    s.add_dependency(%q<rubocop>, "= 1.25.1")
     s.add_dependency(%q<database_cleaner>, [">= 0"])
   end
 end
