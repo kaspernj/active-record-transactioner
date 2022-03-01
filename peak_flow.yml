@@ -1,6 +1,7 @@
 before_script:
   - wait-for-it mysql:3306
   - cd spec/dummy && cp config/database.peakflow.yml config/database.yml
+  - bundle exec appraisal bundle
   - cd spec/dummy && RAILS_ENV=test bundle exec rails db:create db:environment:set db:schema:load
 rvm: true
 services:
@@ -13,6 +14,32 @@ services:
     image: mysql:5.7.29
     expose:
       - 3306
-script:
-  - bundle exec rspec
-  - bundle exec rake best_practice_project:run
+builds:
+  build_1:
+    environment:
+      RUBY_VERSION: 2.7.5
+    name: Ruby 2.7.5, Rails 6
+    script:
+      - bundle exec appraisal "rails 6" rspec
+  build_2:
+    environment:
+      RUBY_VERSION: 2.7.5
+    name: Ruby 2.7.5, Rails 7
+    script:
+      - bundle exec appraisal "rails 7" rspec
+  build_3:
+    environment:
+      RUBY_VERSION: 3.0.3
+    name: Ruby 3.0.3, Rails 6
+    script:
+      - bundle exec appraisal "rails 6" rspec
+  build_4:
+    environment:
+      RUBY_VERSION: 3.0.3
+    name: Ruby 3.0.3, Rails 7
+    script:
+      - bundle exec appraisal "rails 7" rspec
+  build_5:
+    name: Linters
+    script:
+      - bundle exec rake best_practice_project:run

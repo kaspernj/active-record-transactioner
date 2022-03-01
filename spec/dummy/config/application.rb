@@ -4,7 +4,7 @@ require File.expand_path("boot", __dir__)
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
-require "sprockets/railtie"
+require "sprockets/railtie" unless Gem.loaded_specs["rails"].version.to_s.start_with?("7.")
 # require "rails/test_unit/railtie"
 
 Bundler.require(*Rails.groups)
