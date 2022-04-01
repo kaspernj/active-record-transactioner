@@ -14,6 +14,7 @@ services:
     image: mysql:5.7.29
     expose:
       - 3306
+    restart_policy: on-failure
 builds:
   build_1:
     environment:
