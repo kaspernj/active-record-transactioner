@@ -202,7 +202,8 @@ GEM
     rubocop-rspec (2.11.1)
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
-    sqlite3 (1.4.4)
+    sqlite3 (1.5.1)
+      mini_portile2 (~> 2.8.0)
     string-cases (0.0.4)
     stringio (3.0.1)
     thor (1.2.1)
@@ -236,7 +237,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  sqlite3 (= 1.4.4)
+  sqlite3 (= 1.5.1)
   tzinfo-data
 
 BUNDLED WITH
