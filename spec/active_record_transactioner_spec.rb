@@ -2,7 +2,7 @@ require "spec_helper"
 require "tmpdir"
 
 describe "ActiveRecordTransactioner" do
-  it "works" do
+  it "saves the expected models" do
     require_relative "test_classes/active_record_transactioner_test_class"
 
     trans = ActiveRecordTransactioner.new(transaction_size: 2)
