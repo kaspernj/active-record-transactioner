@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("sqlite3", "= 1.5.4")
   s.add_development_dependency("mysql2", "= 0.5.4")
   s.add_development_dependency("pry", [">= 0"])
-  s.add_development_dependency("rubocop", "= 1.38.0")
+  s.add_development_dependency("rubocop", "= 1.39.0")
   s.add_development_dependency("database_cleaner", [">= 0"])
   s.add_development_dependency("rubocop-performance")
   s.add_development_dependency("rubocop-rails")
