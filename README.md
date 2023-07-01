@@ -6,7 +6,7 @@ Queue saving and destroying of many models into transactions through multiple th
 
 Add to your Gemfile and bundle:
 ```ruby
-gem 'active-record-transactioner'
+gem "active-record-transactioner"
 ```
 
 ## Usage
