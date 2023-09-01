@@ -107,7 +107,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.4)
     minitest (5.18.1)
     mysql2 (0.5.5)
     net-imap (0.3.1)
@@ -214,7 +214,7 @@ GEM
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
-    sqlite3 (1.6.3)
+    sqlite3 (1.6.4)
       mini_portile2 (~> 2.8.0)
     string-cases (0.0.4)
     stringio (3.0.4)
@@ -249,7 +249,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  sqlite3 (= 1.6.3)
+  sqlite3 (= 1.6.4)
   tzinfo-data
 
 BUNDLED WITH
