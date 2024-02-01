@@ -1,7 +1,6 @@
 before_script:
   - wait-for-it mysql:3306
   - cd spec/dummy && cp config/database.peakflow.yml config/database.yml
-  - bundle exec appraisal bundle
   - cd spec/dummy && RAILS_ENV=test bundle exec rails db:create db:environment:set db:schema:load
 rvm: true
 services:
@@ -22,32 +21,28 @@ builds:
       - BUNDLE_GEMFILE=gemfiles/ruby_2_rails_6.gemfile
       - RUBY_VERSION=2.7.8
     script:
-      - rvm use 2.7.8 && bundle
-      - rvm use 2.7.8 && appraisal "ruby 2 rails 6" rspec
+      - bundle exec appraisal "ruby 2 rails 6" rspec
   build_2:
     name: Ruby 2.7.8, Rails 7
     environment:
       - BUNDLE_GEMFILE=gemfiles/ruby_2_rails_7.gemfile
       - RUBY_VERSION=2.7.8
     script:
-      - rvm use 2.7.8 && bundle
-      - rvm use 2.7.8 && appraisal "ruby 2 rails 7" rspec
+      - bundle exec appraisal "ruby 2 rails 7" rspec
   build_3:
     name: Ruby 3.2.2, Rails 6
     environment:
       - BUNDLE_GEMFILE=gemfiles/ruby_3_rails_6.gemfile
       - RUBY_VERSION=3.2.2
     script:
-      - rvm use 3.2.2 && bundle
-      - rvm use 3.2.2 && appraisal "ruby 3 rails 6" rspec
+      - bundle exec appraisal "ruby 3 rails 6" rspec
   build_4:
     name: Ruby 3.2.2, Rails 7
     environment:
       - BUNDLE_GEMFILE=gemfiles/ruby_3_rails_7.gemfile
       - RUBY_VERSION=3.2.2
     script:
-      - rvm use 3.2.2 && bundle
-      - rvm use 3.2.2 && appraisal "ruby 3 rails 7" rspec
+      - bundle exec appraisal "ruby 3 rails 7" rspec
   build_5:
     name: Linters
     script:
