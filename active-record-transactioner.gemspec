@@ -25,21 +25,4 @@ Gem::Specification.new do |s|
   s.summary = "Queue up calls to specific models and execute them in transactions, after a certain number of models have been added."
 
   s.add_dependency("rails", ">= 6.0.0")
-
-  s.add_development_dependency("appraisal")
-  s.add_development_dependency("best_practice_project")
-  s.add_development_dependency("rspec-rails", "~> 6.0.1")
-  s.add_development_dependency("rdoc", "~> 6.2")
-  s.add_development_dependency("bundler", [">= 1.0.0"])
-  s.add_development_dependency("builder", [">= 0"])
-  s.add_development_dependency("activerecord", [">= 0"])
-  s.add_development_dependency("sqlite3", "= 1.6.7")
-  s.add_development_dependency("mysql2", "= 0.5.5")
-  s.add_development_dependency("pry", [">= 0"])
-  s.add_development_dependency("rubocop", "= 1.60.2")
-  s.add_development_dependency("database_cleaner", [">= 0"])
-  s.add_development_dependency("rubocop-performance")
-  s.add_development_dependency("rubocop-rails")
-  s.add_development_dependency("rubocop-rspec")
-  s.add_development_dependency("tzinfo-data")
 end
