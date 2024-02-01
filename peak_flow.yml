@@ -21,12 +21,12 @@ builds:
   build_1:
     name: Ruby 2.7.8, Rails 6
     script:
-      - rvm use 2.7.8 && gem install appraisal bundler:2.3.8 && appraisal "ruby 2 rails 6" bundle
+      - rvm use 2.7.8 && gem install appraisal bundler:2.3.8 && appraisal "ruby 2 rails 6" install && appraisal "ruby 2 rails 6" bundle
       - rvm use 2.7.8 && appraisal "ruby 2 rails 6" rspec
   build_2:
     name: Ruby 2.7.8, Rails 7
     script:
-      - rvm use 2.7.8 && gem install appraisal bundler:2.3.8 && appraisal "ruby 2 rails 7" bundle
+      - rvm use 2.7.8 && gem install appraisal bundler:2.3.8 && appraisal "ruby 2 rails 7" install && appraisal "ruby 2 rails 7" bundle
       - rvm use 2.7.8 && appraisal "ruby 2 rails 7" rspec
   build_3:
     name: Ruby 3.2.2, Rails 6
