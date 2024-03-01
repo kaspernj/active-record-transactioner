@@ -8,7 +8,7 @@ group :development, :test do
   gem "builder", ">= 0"
   gem "bundler", ">= 1.0.0"
   gem "database_cleaner", ">= 0"
-  gem "mysql2", "= 0.5.5"
+  gem "mysql2", "0.5.6"
   gem "pry", ">= 0"
   gem "rdoc", "~> 6.2"
   gem "rspec-rails", "~> 6.1.1"
