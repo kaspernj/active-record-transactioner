@@ -189,7 +189,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.1.0)
-    rdoc (6.6.3.1)
+    rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
     reline (0.5.0)
@@ -275,7 +275,7 @@ DEPENDENCIES
   database_cleaner
   mysql2 (= 0.5.6)
   pry
-  rdoc (~> 6.6)
+  rdoc (~> 6.7)
   rspec-rails (~> 6.1.2)
   rubocop (= 1.64.1)
   rubocop-performance
