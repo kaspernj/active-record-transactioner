@@ -10,7 +10,7 @@ group :development, :test do
   gem "database_cleaner", ">= 0"
   gem "mysql2", "0.5.6"
   gem "pry", ">= 0"
-  gem "rdoc", "~> 6.8"
+  gem "rdoc", "~> 6.10"
   gem "rspec-rails", "~> 7.1.0"
   gem "rubocop", "1.69.1"
   gem "rubocop-performance"
