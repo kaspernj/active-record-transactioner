@@ -12,7 +12,7 @@ group :development, :test do
   gem "pry", ">= 0"
   gem "rdoc", "~> 6.10"
   gem "rspec-rails", "~> 7.1.0"
-  gem "rubocop", "1.69.1"
+  gem "rubocop", "1.70.0"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
