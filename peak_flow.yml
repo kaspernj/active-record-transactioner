@@ -13,7 +13,11 @@ services:
     image: mysql:5.7.29
     expose:
       - 3306
-    restart_policy: on-failure
+    restart_policy: always
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
 builds:
   build_1:
     name: Ruby 3.2.2, Rails 6
