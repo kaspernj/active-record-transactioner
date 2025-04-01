@@ -13,34 +13,38 @@ services:
     image: mysql:5.7.29
     expose:
       - 3306
-    restart_policy: on-failure
+    restart_policy: always
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
 builds:
   build_1:
-    name: Ruby 2.7.8, Rails 6
-    environment:
-      - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_2_rails_6.gemfile
-      - RUBY_VERSION=2.7.8
-    script:
-      - bundle exec appraisal "ruby 2 rails 6" rspec
-  build_2:
-    name: Ruby 2.7.8, Rails 7
-    environment:
-      - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_2_rails_7.gemfile
-      - RUBY_VERSION=2.7.8
-    script:
-      - bundle exec appraisal "ruby 2 rails 7" rspec
-  build_3:
     name: Ruby 3.2.2, Rails 6
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_6.gemfile
       - RUBY_VERSION=3.2.2
     script:
       - bundle exec appraisal "ruby 3 rails 6" rspec
-  build_4:
+  build_2:
     name: Ruby 3.2.2, Rails 7
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_7.gemfile
       - RUBY_VERSION=3.2.2
+    script:
+      - bundle exec appraisal "ruby 3 rails 7" rspec
+  build_3:
+    name: Ruby 3.3.7, Rails 6
+    environment:
+      - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_6.gemfile
+      - RUBY_VERSION=3.3.7
+    script:
+      - bundle exec appraisal "ruby 3 rails 6" rspec
+  build_4:
+    name: Ruby 3.4.2, Rails 7
+    environment:
+      - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_7.gemfile
+      - RUBY_VERSION=3.4.2
     script:
       - bundle exec appraisal "ruby 3 rails 7" rspec
   build_5:

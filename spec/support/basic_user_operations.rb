@@ -22,13 +22,13 @@ shared_examples_for "basic user operations" do
       end
     end
 
+    expect(User.count).to eq 200
+
     count = 0
     User.order(:id).each do |user|
       expect(user.email).to eq "user#{count}@example.com"
       count += 1
     end
-
-    expect(User.count).to eq 200
   end
 
   it "#update_columns" do
