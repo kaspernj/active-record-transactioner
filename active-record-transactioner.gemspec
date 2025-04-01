@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{config,lib}/**/*", "Rakefile"]
   s.homepage = "http://github.com/kaspernj/active-record-transactioner"
   s.licenses = ["MIT"]
-  s.rubygems_version = "2.2.2"
+  s.rubygems_version = "3.2.2"
   s.summary = "Queue up calls to specific models and execute them in transactions, after a certain number of models have been added."
 
   s.add_dependency("rails", ">= 6.0.0")
