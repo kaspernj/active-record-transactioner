@@ -11,7 +11,7 @@ group :development, :test do
   gem "mysql2", "0.5.6"
   gem "pry", ">= 0"
   gem "rdoc", "~> 6.14"
-  gem "rspec-rails", "~> 8.0.0"
+  gem "rspec-rails", "~> 8.0.1"
   gem "rubocop", "1.75.8"
   gem "rubocop-performance"
   gem "rubocop-rails"
