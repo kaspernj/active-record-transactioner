@@ -203,7 +203,7 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
-    regexp_parser (2.10.0)
+    regexp_parser (2.11.2)
     reline (0.6.1)
       io-console (~> 0.5)
     rspec-core (3.13.5)
@@ -223,7 +223,7 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.4)
-    rubocop (1.79.1)
+    rubocop (1.80.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -260,7 +260,7 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2025.2)
       tzinfo (>= 1.0.0)
-    unicode-display_width (3.1.4)
+    unicode-display_width (3.1.5)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
     useragent (0.16.11)
@@ -284,7 +284,7 @@ DEPENDENCIES
   pry
   rdoc (~> 6.14)
   rspec-rails (~> 8.0.1)
-  rubocop (= 1.79.1)
+  rubocop (= 1.80.1)
   rubocop-performance
   rubocop-rails
   rubocop-rspec
