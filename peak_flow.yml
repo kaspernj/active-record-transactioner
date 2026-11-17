@@ -21,6 +21,22 @@ services:
 builds:
   build_1:
     name: Ruby 3.2.2, Rails 6
+    paths:
+      - "lib/**"
+      - "spec/**"
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "Appraisals"
+      - "Rakefile"
+      - "active-record-transactioner.gemspec"
+      - "VERSION"
+      - "peak_flow.yml"
+      - "**/*.lock"
+      - "gemfiles/**"
+      - "!gemfiles/ruby_3_rails_7.gemfile"
+      - "config/**"
+      - ".rubocop.yml"
+      - ".github/**"
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_6.gemfile
       - RUBY_VERSION=3.2.2
@@ -28,6 +44,22 @@ builds:
       - bundle exec appraisal "ruby 3 rails 6" rspec
   build_2:
     name: Ruby 3.2.2, Rails 7
+    paths:
+      - "lib/**"
+      - "spec/**"
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "Appraisals"
+      - "Rakefile"
+      - "active-record-transactioner.gemspec"
+      - "VERSION"
+      - "peak_flow.yml"
+      - "**/*.lock"
+      - "gemfiles/**"
+      - "!gemfiles/ruby_3_rails_6.gemfile"
+      - "config/**"
+      - ".rubocop.yml"
+      - ".github/**"
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_7.gemfile
       - RUBY_VERSION=3.2.2
@@ -35,6 +67,22 @@ builds:
       - bundle exec appraisal "ruby 3 rails 7" rspec
   build_3:
     name: Ruby 3.3.7, Rails 6
+    paths:
+      - "lib/**"
+      - "spec/**"
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "Appraisals"
+      - "Rakefile"
+      - "active-record-transactioner.gemspec"
+      - "VERSION"
+      - "peak_flow.yml"
+      - "**/*.lock"
+      - "gemfiles/**"
+      - "!gemfiles/ruby_3_rails_7.gemfile"
+      - "config/**"
+      - ".rubocop.yml"
+      - ".github/**"
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_6.gemfile
       - RUBY_VERSION=3.3.7
@@ -42,6 +90,22 @@ builds:
       - bundle exec appraisal "ruby 3 rails 6" rspec
   build_4:
     name: Ruby 3.4.2, Rails 7
+    paths:
+      - "lib/**"
+      - "spec/**"
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "Appraisals"
+      - "Rakefile"
+      - "active-record-transactioner.gemspec"
+      - "VERSION"
+      - "peak_flow.yml"
+      - "**/*.lock"
+      - "gemfiles/**"
+      - "!gemfiles/ruby_3_rails_6.gemfile"
+      - "config/**"
+      - ".rubocop.yml"
+      - ".github/**"
     environment:
       - BUNDLE_GEMFILE=/home/build/project/gemfiles/ruby_3_rails_7.gemfile
       - RUBY_VERSION=3.4.2
@@ -49,5 +113,21 @@ builds:
       - bundle exec appraisal "ruby 3 rails 7" rspec
   build_5:
     name: Linters
+    paths:
+      - "**/*.rb"
+      - "**/*.yml"
+      - "**/*.yaml"
+      - "**/*.lock"
+      - "Gemfile"
+      - "Gemfile.lock"
+      - "Appraisals"
+      - "Rakefile"
+      - "active-record-transactioner.gemspec"
+      - "VERSION"
+      - "peak_flow.yml"
+      - "gemfiles/**"
+      - "config/**"
+      - ".rubocop.yml"
+      - ".github/**"
     script:
       - bundle exec rake best_practice_project:run
